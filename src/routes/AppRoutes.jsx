@@ -9,8 +9,8 @@ export const AppRoutes = () => {
     return (
         <AuthProvider>
             <Routes>
-                <Route path="/products" element = { <ProductsRoutes /> } />
-                <Route path="/*" element = { <LoginPage /> } />
+                <Route path="/productos/*" element = { <ProductsRoutes /> } />
+                <Route path="/" element = { <LoginPage /> } />
             </Routes>
         </AuthProvider>
     );

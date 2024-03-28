@@ -9,10 +9,10 @@ export const LoginPage = () => {
 
     const onLogin = () => {
         
-        navigate ('/products', {
+        navigate ('/productos', {
             replace: true
         })
-    }
+    } 
 
     return (
         <div className="contenedor contenedorCentrado">

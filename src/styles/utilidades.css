@@ -25,6 +25,13 @@ li {
     list-style: none;
 }
 
+h2 {
+    text-align: center;
+    font-size: 3rem;
+    text-transform: uppercase;
+    margin: 1rem;
+}
+
 #root {
     min-height: 100vh;
 }
@@ -69,6 +76,10 @@ li {
 .btnVerde {
     background-color: var(--btnVerde);
     color: #000000;
+}
+
+.w-100{
+    width: 100%;
 }
 
 .formularioBuscador {
@@ -141,6 +152,8 @@ li {
     border-radius: 1.5rem;
 }
 
-.imgLoading {
-    width: 25rem;
+.loading {
+    text-align: center;
+    font-size: 3rem;
+    color: #3B6CA6;
 }
