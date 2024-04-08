@@ -1,5 +1,5 @@
 const db = require('../data/database');
-const router = require("express").Router(); 
+const router = require("express").Router();
 const ProductoModel = require("../models/ProductoModel");
 const Sequelize = require('sequelize');
 const Joi = require('joi');
@@ -9,8 +9,12 @@ const Joi = require('joi');
 //LISTAR PRODUCTOS TOTALES
 async function listarProductos(req, res) {
     try {
-        const ListProduct = await ProductoModel.findAll();
-        res.json(ListProduct);
+        const resultados = await db.query("CALL BuscarProductos(:param)", {
+            replacements: { param: '' },
+            type: db.QueryTypes.RAW
+        });
+        const datos = resultados;
+        res.json(datos);
     } catch (error) {
         res.status(500).json({ error: 'Ocurrió un error al listar los productos' });
     }
@@ -19,18 +23,21 @@ async function listarProductos(req, res) {
 //TODO: insertar nuevo producto 
 const productoNuevoValidate = Joi.object({
     codCategoria: Joi.number().integer().required(),
-    codTamanio: Joi.number().integer().optional(),
+    codTamanio: Joi.number().integer().empty('').default(1).optional(),
     nombre: Joi.string().required(),
     descripcion: Joi.string().optional(),
-    peso: Joi.number().optional(),
-    mililitro: Joi.number().optional(),
-    cantidad: Joi.number().integer().optional(),
-    imagen: Joi.string().optional(),
-    stock: Joi.number().integer().optional(), 
-    precioContado: Joi.number().optional(), 
-    precioLista: Joi.number().optional(), 
-    precioSuelto: Joi.number().optional() 
-}); 
+    peso: Joi.string().allow('').optional(),
+    mililitro: Joi.string().allow('').optional(),
+    cantidad: Joi.number().integer().allow("").optional(),
+    imagen: Joi.string().allow("").optional(),
+    stock: Joi.number().integer().allow("").optional(),
+    precioContado: Joi.number().allow("").optional(),
+    precioLista: Joi.number().allow("").optional(),
+    precioSuelto: Joi.number().allow("").optional(),
+    codEdades: Joi.array().items(Joi.number().integer()).optional(),
+    codMascotas: Joi.array().items(Joi.number().integer()).optional()
+});
+
 async function crearProducto(req, res) {
     const { error, value } = productoNuevoValidate.validate(req.body);
     if (error) {
@@ -41,7 +48,7 @@ async function crearProducto(req, res) {
     try {
         await db.query("CALL InsertarProducto(?)", {
             replacements: [JSON.stringify(producto)],
-            type: Sequelize.QueryTypes.RAW  
+            type: Sequelize.QueryTypes.RAW
         });
         res.status(201).json({ message: 'Producto creado exitosamente' });
     } catch (error) {
@@ -73,9 +80,9 @@ const productoModificarValidate = Joi.object({
     codTamanio: Joi.number().integer().optional(),
     nombre: Joi.string().required(),
     descripcion: Joi.string().optional(),
-    peso: Joi.number().optional(),
-    mililitro: Joi.number().optional(),
-    cantidad: Joi.number().integer().optional(),
+    peso: Joi.number().allow("").optional(),
+    mililitro: Joi.number().allow("").optional(),
+    cantidad: Joi.number().integer().allow("").optional(),
     imagen: Joi.string().optional(),
     stock: Joi.number().integer().optional(),
     precioContado: Joi.number().optional(),
@@ -84,6 +91,8 @@ const productoModificarValidate = Joi.object({
     codEdades: Joi.array().items(Joi.number().integer()).optional(),
     codMascotas: Joi.array().items(Joi.number().integer()).optional()
 });
+
+
 
 //TODO: modificar un producto 
 async function modificarProducto(req, res) {
@@ -96,7 +105,7 @@ async function modificarProducto(req, res) {
     try {
         await db.query("CALL ModificarProducto(?)", {
             replacements: [JSON.stringify(producto)],
-            type: Sequelize.QueryTypes.RAW 
+            type: Sequelize.QueryTypes.RAW
         });
         res.status(200).json({ message: 'Producto modificado exitosamente' });
     } catch (error) {

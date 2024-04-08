@@ -2,10 +2,11 @@
 const express = require("express");
 const morgan = require("morgan");
 const bodyParser = require('body-parser');
-
+const cors = require ('cors')
 //instancia de express  
 const app = express();
 app.set("port", 4000);
+app.use (cors())
 
 //database 
 const db = require('./data/database');

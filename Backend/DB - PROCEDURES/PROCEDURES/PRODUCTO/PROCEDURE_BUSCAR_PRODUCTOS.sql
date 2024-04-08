@@ -8,8 +8,8 @@ BEGIN
         t.nombreTamanio, t.codTamanio
     FROM producto p
     LEFT JOIN categoria c ON c.codCategoria = p.codCategoria
-    LEFT JOIN producto_edad pe ON pe.codProducto = p.codProducto
-    LEFT JOIN producto_mascota pm ON pm.codProducto = p.codProducto
+    JOIN producto_edad pe ON pe.codProducto = p.codProducto
+    JOIN producto_mascota pm ON pm.codProducto = p.codProducto
     LEFT JOIN mascota m ON m.codMascota = pm.codMascota
     LEFT JOIN edad e ON e.codEdad = pe.codEdad
     LEFT JOIN tamanio t ON t.codTamanio = p.codTamanio
