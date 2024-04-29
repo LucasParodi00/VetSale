@@ -3,19 +3,19 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { validacion } from "../../../componetes/validaciones";
 
+export const DatosPrincipal = ({ nuevoProducto, setNuevoProducto, progreso, setProgreso }) => {
 
 
-
-export const DatosPrincipal = ({ nuevoProducto, setNuevoProducto }) => {
 
     const { handleSubmit, register, formState: { errors } } = useForm({ defaultValues: nuevoProducto });
     const navigate = useNavigate();
 
-    const { nombre, descripcion } = nuevoProducto;
 
     const onSubmit = ({ nombre, descripcion }) => {
         setNuevoProducto({ ...nuevoProducto, nombre, descripcion });
-        navigate('categoria')
+        setProgreso(progreso + 1);
+        console.log(progreso);
+        navigate('1');
     }
 
     const cancelarNuevoProducto = () => {

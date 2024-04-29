@@ -1,18 +1,26 @@
 import { Box, Button, FormControl, FormHelperText, Grid, InputLabel, MenuItem, TextField, Select } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { validacion } from "../../../componetes/validaciones";
 
 
-export const DatosCategoria = ({ nuevoProducto, setNuevoProducto }) => {
+export const DatosCategoria = ({ nuevoProducto, setNuevoProducto, progreso, setProgreso }) => {
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (progreso < 0) {
+            console.log(progreso);
+            navigate('/productos');
+        }
+    }, [progreso, navigate]);
 
     const { codCategoria: codCategoriaEstado } = nuevoProducto;
 
     const [codCategoria, setcodCategoria] = useState(codCategoriaEstado);
     const [codTamanio, setTamaio] = useState('');
 
-    const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues: nuevoProducto });
 
     const handleChangecodCategoria = (event) => {
@@ -25,7 +33,8 @@ export const DatosCategoria = ({ nuevoProducto, setNuevoProducto }) => {
 
     const onSubmit = ({ codCategoria, peso, mililitro, cantidad, codTamanio }) => {
         setNuevoProducto({ ...nuevoProducto, codCategoria, peso, mililitro, cantidad, codTamanio })
-        navigate('../mascota')
+        setProgreso(progreso + 1);
+        navigate('../2')
     }
 
     return (
@@ -89,9 +98,9 @@ export const DatosCategoria = ({ nuevoProducto, setNuevoProducto }) => {
                                         onChange={handleChangecodTamanio}
                                         error={!!errors.tamanio}
                                     >
-                                        <MenuItem value={1}>Grande</MenuItem>
+                                        <MenuItem value={3}>Grande</MenuItem>
                                         <MenuItem value={2}>Mediano</MenuItem>
-                                        <MenuItem value={3}>Chico</MenuItem>
+                                        <MenuItem value={1}>Chico</MenuItem>
                                     </Select>
                                     {errors.codTamanio && <FormHelperText> {errors.codTamanio?.message} </FormHelperText>}
                                 </FormControl>

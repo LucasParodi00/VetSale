@@ -1,16 +1,22 @@
 import { Box, Button, Checkbox, FormControlLabel, FormGroup, Grid, TextField, Typography } from "@mui/material"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 
 
-export const DatosMascota = ({ nuevoProducto, setNuevoProducto }) => {
+export const DatosMascota = ({ nuevoProducto, setNuevoProducto, progreso, setProgreso }) => {
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (progreso < 1) {
+            console.log(progreso);
+            navigate('/productos');
+        }
+    }, [progreso, navigate]);
 
     const [codMascotas, setcodMascotas] = useState(nuevoProducto.codMascotas || []);
     const [codEdades, setcodEdades] = useState(nuevoProducto.codEdades || []);
     const { handleSubmit } = useForm({ defaultValues: nuevoProducto });
-    const navigate = useNavigate();
 
     const onSubmit = () => {
         if (codMascotas.length === 0 || codEdades.length === 0) {
@@ -18,7 +24,8 @@ export const DatosMascota = ({ nuevoProducto, setNuevoProducto }) => {
             return;
         }
         setNuevoProducto({ ...nuevoProducto, codMascotas, codEdades })
-        navigate('../precios');
+        setProgreso(progreso + 1);
+        navigate('../3');
     }
 
     const handlecodEdades = (event) => {
@@ -88,7 +95,7 @@ export const DatosMascota = ({ nuevoProducto, setNuevoProducto }) => {
                 </Grid>
 
                 <Box component={'div'} sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
-                    <Button onClick={() => navigate('../categoria')} variant="contained"> Atras </Button>
+                    <Button onClick={() => navigate('../1')} variant="contained"> Atras </Button>
                     <Button type="submit" variant="contained"> Siguiente </Button>
                 </Box>
             </form>

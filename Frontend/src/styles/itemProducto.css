@@ -1,7 +1,6 @@
-
 .itemProductoContenedor {
     display: grid;
-    grid-template-columns: 30% 15% 15% 15% 15% 5% 5%;
+    grid-template-columns: 50% 10% 10% 10% 10% 5% 5%;
     width: 100%;
     border-radius: 1.5rem;
     padding: .5rem 1rem;
@@ -9,7 +8,7 @@
     background-color: var(--fondoItem);
 }
 
-.itemProductoContenedor > div  {
+.itemProductoContenedor>div {
     display: inherit;
     justify-content: center;
     align-items: center;
