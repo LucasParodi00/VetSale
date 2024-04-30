@@ -1,12 +1,6 @@
 import { useTheme } from "@emotion/react";
-import { ModeEdit } from "@mui/icons-material";
-import { Avatar, Box, Button, Card, CardHeader, CardMedia, Grid, Modal, Typography } from "@mui/material";
-import { useState } from "react";
+import { Box, Card, CardMedia, Grid, Modal, Typography } from "@mui/material";
 import { CardProducto } from "./CardProducto";
-
-
-
-
 
 export const ProductoModal = ({ producto, open, setOpen }) => {
     const theme = useTheme();
@@ -29,19 +23,30 @@ export const ProductoModal = ({ producto, open, setOpen }) => {
             <Modal
                 open={open}
                 onClose={handleClose}
-
             >
                 <Box sx={boxStyle} >
                     <Grid container spacing={1}>
                         <Grid item sm={5} sx={{ background: root.blanco, borderRadius: '1.5rem', padding: '.5rem' }} >
                             <Card >
-                                <CardMedia
-                                    sx={{ objectFit: 'contain' }}
-                                    component="img"
-                                    height="500"
-                                    image={'/img/producto.jpg'}
-                                    alt="green iguana"
-                                />
+                                {
+                                    producto && producto.imagen && producto.imagen != null ? (
+                                        <CardMedia
+                                            sx={{ objectFit: 'contain' }}
+                                            component="img"
+                                            height="500"
+                                            image={producto.imagen}
+                                            alt="green iguana"
+                                        />
+                                    ) : (
+                                        < CardMedia
+                                            sx={{ objectFit: 'contain' }}
+                                            component="img"
+                                            height="500"
+                                            image={'/img/producto.jpg'}
+                                            alt="green iguana"
+                                        />
+                                    )
+                                }
                             </Card>
                         </Grid>
                         <Grid item sm={7} >

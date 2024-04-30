@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { validacion } from "../../../componetes/validaciones";
-import { setProducto } from "../../../api/productos/productosApi";
+import { setProducto, updateProducto } from "../../../api/productos/productosApi";
 
 
 export const DatosPrecio = ({ nuevoProducto, setNuevoProducto, progreso, setProgreso }) => {
     const navigate = useNavigate();
+
     useEffect(() => {
         if (progreso < 2) {
             console.log(progreso);
@@ -25,11 +26,19 @@ export const DatosPrecio = ({ nuevoProducto, setNuevoProducto, progreso, setProg
     const onSubmit = async ({ stock, precioContado, precioLista, precioSuelto }) => {
         const productoActualizado = { ...nuevoProducto, stock, precioContado, precioLista, precioSuelto, estado }
         setNuevoProducto(productoActualizado)
+        let mensaje = '';
         try {
-            const mensaje = await Promise.race([
-                setProducto(productoActualizado),
-                new Promise((_, reject) => setTimeout(() => reject('Tiempo de espera excedido'), 10000))
-            ]);
+            if (productoActualizado.codProducto === '') {
+                mensaje = await Promise.race([
+                    setProducto(productoActualizado),
+                    new Promise((_, reject) => setTimeout(() => reject('Tiempo de espera excedido'), 10000))
+                ]);
+            } else {
+                mensaje = await Promise.race([
+                    updateProducto(productoActualizado),
+                    new Promise((_, reject) => setTimeout(() => reject('Tiempo de espera excedido'), 10000))
+                ]);
+            }
             navigate('../4', { state: { mensaje } })
         } catch (error) {
             navigate('../4', { state: { mensaje: 'No se pudo cargar el producto:  ' + error.message } })

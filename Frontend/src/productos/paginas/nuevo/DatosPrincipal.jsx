@@ -6,15 +6,12 @@ import { validacion } from "../../../componetes/validaciones";
 export const DatosPrincipal = ({ nuevoProducto, setNuevoProducto, progreso, setProgreso }) => {
 
 
-
-    const { handleSubmit, register, formState: { errors } } = useForm({ defaultValues: nuevoProducto });
+    const { handleSubmit, register, formState: { errors }, reset } = useForm({ defaultValues: nuevoProducto });
     const navigate = useNavigate();
-
 
     const onSubmit = ({ nombre, descripcion }) => {
         setNuevoProducto({ ...nuevoProducto, nombre, descripcion });
         setProgreso(progreso + 1);
-        console.log(progreso);
         navigate('1');
     }
 

@@ -1,4 +1,4 @@
-import { Box, Button, Checkbox, FormControlLabel, FormGroup, Grid, TextField, Typography } from "@mui/material"
+import { Box, Button, Checkbox, FormControlLabel, FormGroup, Grid, Input, TextField, Typography } from "@mui/material"
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,11 @@ import { useNavigate } from "react-router-dom";
 
 export const DatosMascota = ({ nuevoProducto, setNuevoProducto, progreso, setProgreso }) => {
     const navigate = useNavigate();
+    const [codMascotas, setcodMascotas] = useState(nuevoProducto.codMascotas ? nuevoProducto.codMascotas.map(String) : []);
+    const [codEdades, setcodEdades] = useState(nuevoProducto.codEdades ? nuevoProducto.codEdades.map(String) : []);
+    const { handleSubmit, register } = useForm({ defaultValues: nuevoProducto });
+
+
     useEffect(() => {
         if (progreso < 1) {
             console.log(progreso);
@@ -14,16 +19,16 @@ export const DatosMascota = ({ nuevoProducto, setNuevoProducto, progreso, setPro
         }
     }, [progreso, navigate]);
 
-    const [codMascotas, setcodMascotas] = useState(nuevoProducto.codMascotas || []);
-    const [codEdades, setcodEdades] = useState(nuevoProducto.codEdades || []);
-    const { handleSubmit } = useForm({ defaultValues: nuevoProducto });
-
-    const onSubmit = () => {
+    const onSubmit = ({ imagen }) => {
         if (codMascotas.length === 0 || codEdades.length === 0) {
             alert('Por favor seleccione una codMascotas y el rango de codEdades')
             return;
         }
-        setNuevoProducto({ ...nuevoProducto, codMascotas, codEdades })
+
+        const datosImagen = imagen[0]
+
+        setNuevoProducto({ ...nuevoProducto, codMascotas, codEdades, imagen: datosImagen })
+        console.log(imagen);
         setProgreso(progreso + 1);
         navigate('../3');
     }
@@ -90,7 +95,13 @@ export const DatosMascota = ({ nuevoProducto, setNuevoProducto, progreso, setPro
                             Imagen [ JPEG / PNG ]
                         </Typography>
 
-                        <TextField type="file" />
+                        <Input
+                            type="file"
+                            {...register('imagen')}
+                        />
+                        {/* <TextField
+                            type="file"
+                        /> */}
                     </Grid>
                 </Grid>
 

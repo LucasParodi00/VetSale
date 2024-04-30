@@ -1,17 +1,25 @@
 import { DeleteForever, ModeEdit } from "@mui/icons-material";
 import { Button } from "@mui/material";
+import { Link } from "react-router-dom";
+import { deleteProducto } from "../../api/productos/productosApi";
 
 
 export const ItemProducto = ({ productos, verProducto, productoEstado }) => {
-    const { codProducto, edades, mascotas, nombre, stock, precioContado, precioLista, precioSuelto } = productos;
+    const { codProducto, nombre, stock, precioContado, precioLista, precioSuelto, nombreMascotas, nombreEdades } = productos;
+
+    const eliminarProducto = async () => {
+        const responce = await deleteProducto(codProducto);
+        console.log(responce);
+        // return deleteProducto;
+    }
+
+
 
     return (
-        <div className="itemProductoContenedor animate__animated animate__bounceInRight"
-
-        > {/* dividido en 7 columnas */}
+        <div className="itemProductoContenedor">
             <div className="infoProducto" onClick={() => verProducto(productos)}>
                 <p> <b>{codProducto}</b> | {nombre}</p>
-                <p>Mascota: <span>{mascotas}</span> Edad: <span> {edades} </span></p>
+                <p>Mascota: <span>{nombreMascotas}</span> Edad: <span> {nombreEdades} </span></p>
             </div>
             <div> {/* stock */}
                 <p>Stock: <span> {stock}</span></p>
@@ -29,12 +37,16 @@ export const ItemProducto = ({ productos, verProducto, productoEstado }) => {
                 <span> $ {precioSuelto} </span>
             </div>
             <div> {/* tacho basurero */}
-                <Button><ModeEdit color="" /></Button>
+                <Link
+                    to={'/productos/nuevo'} state={{ codProducto: codProducto }}
+                >
+                    <Button><ModeEdit color="" /></Button>
+                </Link>
             </div>
             <div> {/* lapiz */}
-                <Button><DeleteForever sx={{ color: productoEstado ? 'red' : 'green' }} /> </Button>
+                <Button onClick={eliminarProducto}><DeleteForever sx={{ color: productoEstado ? 'red' : 'green' }} /> </Button>
             </div>
 
-        </div>
+        </div >
     );
 };

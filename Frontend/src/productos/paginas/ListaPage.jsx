@@ -5,10 +5,10 @@ import { useEffect, useRef, useState } from "react";
 import { ItemProducto } from "../componentes/ItemProducto";
 import { Link, useLocation } from "react-router-dom";
 import { ProductoModal } from "../componentes/ProductoModal";
-import { productosApi } from "../../api/productos/productosApi";
+import { getProductos, productosApi } from "../../api/productos/productosApi";
 
 export const ListaPage = () => {
-
+    const limite = 15;
     const location = useLocation();
     const [open, setOpen] = useState(false);
     const [productoSeleccionado, setProductoSeleccionado] = useState(null);
@@ -18,7 +18,6 @@ export const ListaPage = () => {
     const [page, setPage] = useState(1);
     const [productoEstado, setProductoEstado] = useState(true);
     const elementRef = useRef();
-
     const [buscando, setBuscando] = useState(false);
 
 
@@ -57,7 +56,7 @@ export const ListaPage = () => {
 
     async function moreItems() {
         setTimeout(async () => {
-            const { data } = await productosApi.get(`/producto?limite=15&pagina=${page}&v_estado=${productoEstado}`)
+            const data = await getProductos(page, limite, productoEstado)
             if (data.length === 0) {
                 setHasMore(false);
             } else {
@@ -107,7 +106,6 @@ export const ListaPage = () => {
                     }
                     {(hasMore && buscando != true) ? <div ref={elementRef} style={{ textAlign: 'center' }}><CircularProgress sx={{ color: 'red' }} /></div> : ''}
                     {<ProductoModal open={open} setOpen={setOpen} producto={productoSeleccionado} />}
-                    {console.log(buscando)}
                 </div>
             </Container>
         </>

@@ -4,11 +4,18 @@ import { Avatar, Card, CardActions, CardContent, CardHeader, Collapse, Typograph
 import { ExpandMore, ShoppingBag } from "@mui/icons-material";
 
 export const CardProducto = ({ nuevoProducto }) => {
-    const { nombre, descripcion, codCategoria, nombreCategoria, nombreTamanio, mascotas, edades, stock, peso, cantidad, codTamanio, mililitro, codMascotas, codEdades, precioContado, precioLista, precioSuelto } = nuevoProducto;
-    console.log(nuevoProducto);
+    const {
+        nombre, descripcion, stock, peso, cantidad, mililitro, precioContado, precioLista, precioSuelto,
+        codCategoria, nombreCategoria,
+        codTamanio, nombreTamanio,
+        nombreMascotas, codMascotas,
+        codEdades, nombreEdades
+    } = nuevoProducto;
+
     const [expanded, setExpanded] = useState(false);
     const [retorno, setRetorno] = useState(valoresCard(codCategoria, codMascotas, codEdades, codTamanio))
     const [c, m, e, t] = retorno;
+
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -34,8 +41,8 @@ export const CardProducto = ({ nuevoProducto }) => {
                 <Typography> Tamaño: <b>{t + nombreTamanio ? nombreTamanio : ''}</b> </Typography>
                 <Typography> Cantidad: <b>{cantidad}</b> </Typography>
                 <Typography> Mililitro: <b>{mililitro}</b> </Typography>
-                <Typography> Para: <b>{m + mascotas ? mascotas : ''}</b> </Typography>
-                <Typography> Edad: <b>{e + edades ? edades : ''}</b> </Typography>
+                <Typography> Para: <b>{m + nombreMascotas ? nombreMascotas : ''}</b> </Typography>
+                <Typography> Edad: <b>{e + nombreEdades ? nombreEdades : ''}</b> </Typography>
                 <hr />
                 <Typography> Precio Contado: <b>$ {precioContado}</b> </Typography>
                 <Typography> Precio Lista: <b>$ {precioLista}</b> </Typography>

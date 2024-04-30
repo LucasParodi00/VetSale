@@ -50,20 +50,7 @@ const setProductos = async (req, res) => {
         //const body = matchedData(req);
         const { body, file } = req;
         const { codEdades, codMascotas } = body;
-        // console.log('file: ', file);
 
-        // const fileData = {
-        //     fileName: file.filename,
-        //     url: `${PUBLIC_URL}/${file.filename}`
-        // }
-
-        // console.log('Informacion de la imagen: ', file);
-
-        // const imagenData = await store.create(fileData); // Imagen
-
-        // console.log('Informacion de la imagen post agregacion: ', imagenData);
-
-        // const productoData = { ...body, imagen: imagenData.url }
         console.log(body);
         const productoCreado = await producto.create(body); // Informacion del producto
 

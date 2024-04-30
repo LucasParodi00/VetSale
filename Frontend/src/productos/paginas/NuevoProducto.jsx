@@ -1,15 +1,15 @@
-import { Avatar, Card, CardActions, CardContent, CardHeader, Collapse, Container, Grid, Typography } from "@mui/material";
+import { Container, Grid, Typography } from "@mui/material";
 import { DatosCategoria, DatosMascota, DatosPrecio, DatosPrincipal, FinNuevoProducto } from "./";
-import { Route, Routes } from "react-router-dom";
-import { ExpandMore, ShoppingBag } from "@mui/icons-material";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useTheme } from "@emotion/react";
-import { valoresCard } from "../hooks/case";
-import { setProducto } from "../../api/productos/productosApi";
+
 import { CardProducto } from "../componentes/CardProducto";
+import { getProducto } from "../../api/productos/productosApi";
 
 export const NuevoProducto = ({ producto }) => {
     const [nuevoProducto, setNuevoProducto] = useState({
+        codProducto: '',
         nombre: '',
         descripcion: '',
         codCategoria: '',
@@ -22,23 +22,44 @@ export const NuevoProducto = ({ producto }) => {
         codEdades: '',
         precioContado: '',
         precioLista: '',
-        precioSuelto: ''
+        precioSuelto: '',
+        imagen: {}
     });
     const [progreso, setProgreso] = useState(0)
     const theme = useTheme();
     const { root } = theme;
+    const location = useLocation();
+    const codProducto = location.state?.codProducto;
+    const [loading, setLoading] = useState(true);
+
+
+    useEffect(() => {
+        const cargarProducto = async () => {
+            if (codProducto) {
+                const datosProducto = await getProducto(codProducto);
+                setNuevoProducto(datosProducto);
+                setLoading(false);
+            } else {
+                setLoading(false)
+            }
+        };
+        cargarProducto();
+    }, [codProducto]);
 
     useEffect(() => {
         if (producto) {
             setNuevoProducto(producto)
         }
-
     }, [nuevoProducto])
 
 
+    if (loading) {
+        return <div> Cargando wey.... </div>
+    }
+
 
     return (
-        <Container sx={{ backgroundColor: `${root.verdeClaro}`, padding: '1rem', margin: '1rem auto', borderRadius: '.5rem', minHeight: '60vh' }}>
+        <Container className="animate__animated animate__bounceInRight" sx={{ backgroundColor: `${root.verdeClaro}`, padding: '1rem', margin: '1rem auto', borderRadius: '.5rem', minHeight: '60vh' }}>
             <Typography variant="h1" textAlign={'center'} sx={{ fontSize: '3rem', fontWeight: 'bold' }}> Nuevo Producto | {progreso} / 3</Typography>
             <Grid container spacing={1} sx={{ padding: '1.5rem', placeItems: 'center', minHeight: '60vh' }}>
                 <Grid item sm={8}>
@@ -55,6 +76,5 @@ export const NuevoProducto = ({ producto }) => {
                 </Grid>
             </Grid>
         </Container>
-
     )
 }
