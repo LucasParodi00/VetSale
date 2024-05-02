@@ -43,6 +43,20 @@ export const validacion = {
         required: { value: true, message: 'Ingrese el stock' },
         pattern: { value: /^[0-9]+$/, message: 'Ingrese un número válido' }
     },
+    imagen: {
+        require: { value: true, message: 'Debe seleccionar una imagen' },
+        validate: {
+            formatoValido: (value) => {
+                if (!value[0]) return 'Por favor, carga una imagen.';
+                const file = value[0];
+                const extension = file.name.split('.').pop().toLowerCase();
+                if (!(extension === 'png' || extension === 'jpeg' || extension === 'jpg')) {
+                    return 'Por favor, carga una imagen PNG, JPEG o JPG.';
+                }
+                return true;
+            }
+        }
+    }
 
 
 

@@ -59,7 +59,7 @@ export const DatosCategoria = ({ nuevoProducto, setNuevoProducto, progreso, setP
                                     <MenuItem value={4}>Accesorios</MenuItem>
                                     <MenuItem value={5}>Otros</MenuItem>
                                 </Select>
-                                {errors.codCategoria && <FormHelperText> {errors.codCategoria?.message} </FormHelperText>}
+                                {errors.codCategoria && <FormHelperText sx={{ color: 'red' }}> {errors.codCategoria?.message} </FormHelperText>}
                             </FormControl>
                         </Grid>
                         <Grid item container spacing={1} >

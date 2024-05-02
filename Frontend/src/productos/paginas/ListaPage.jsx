@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { ItemProducto } from "../componentes/ItemProducto";
 import { Link, useLocation } from "react-router-dom";
 import { ProductoModal } from "../componentes/ProductoModal";
-import { getProductos, productosApi } from "../../api/productos/productosApi";
+import { getProductos, getProductosFilter, productosApi } from "../../api/productos/productosApi";
 
 export const ListaPage = () => {
     const limite = 15;
@@ -19,8 +19,6 @@ export const ListaPage = () => {
     const [productoEstado, setProductoEstado] = useState(true);
     const elementRef = useRef();
     const [buscando, setBuscando] = useState(false);
-
-
 
     const verProducto = (producto) => {
         setProductoSeleccionado(producto);
@@ -67,25 +65,9 @@ export const ListaPage = () => {
     };
 
     const buscarProducto = async (e) => {
-        if (e.target.value === '') {
-            setBuscando(false);
-            setProductos([]);
-            setPage(1);
-            setHasMore(true);
-        } else {
-            setBuscando(true);
-            const param = encodeURIComponent(e.target.value);
-            console.log(param);
-            try {
-                const { data } = await productosApi.get(`/producto?param=${param}&v_estado=${productoEstado}`)
-                setProductos(data);
-                console.log(data);
-            }
-            catch (error) {
-                console.log(error);
-            }
-        }
+
     }
+
 
     return (
         <>
@@ -93,14 +75,14 @@ export const ListaPage = () => {
                 {mensaje && <Typography variant="h3"> {mensaje} </Typography>}
                 <SectionHeader>
                     <Buscador parametro='un producto' onChange={buscarProducto} />
-                    <Box component='div' display={'flex'} gap={2}>
+                    <Box component='div' display={'flex'} gap={2} >
                         <Link to={'nuevo'}> <ButonVerde> Nuevo Producto </ButonVerde> </Link>
                         <ButonAmarillo onClick={productosEliminados}> {productoEstado ? 'Eliminados' : 'Activos'} </ButonAmarillo>
                     </Box>
                 </SectionHeader>
                 <div className="scroll">
                     {
-                        productos.map((p) => {
+                        productos && productos.length > 0 && productos.map((p) => {
                             return <ItemProducto key={p.codProducto} productos={p} verProducto={verProducto} productoEstado={productoEstado} />
                         })
                     }

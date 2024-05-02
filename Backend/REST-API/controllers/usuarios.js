@@ -2,8 +2,16 @@
 const bcryptjs = require('bcrypt');
 const { usuario } = require('../models');
 
-const getUsuarios = (req, res) => {
-    res.send({ message: 'Lista Usuarios' })
+const getUsuarios = async (req, res) => {
+    try {
+        const usuarios = await usuario.findAllData();
+        res.json(usuarios)
+    } catch (error) {
+        res.json({
+            message: 'Error al listar los usuarios.',
+            error
+        })
+    }
 }
 
 const setUsuario = async (req, res) => {
@@ -26,30 +34,41 @@ const setUsuario = async (req, res) => {
             error
         })
     }
+}
 
+const login = async (req, res) => {
+    const { user, password } = req.body;
+    console.log(req.body);
+    try {
+        const usuarioBusqueda = await usuario.findOne({ where: { user } })
 
+        if (usuarioBusqueda) {
+            const passwordMatch = await bcryptjs.compare(password, usuarioBusqueda.password);
+            if (passwordMatch) {
+                res.status(200)
+                res.json({
+                    message: 'Usuario encontrado',
+                    usuarioBusqueda
+                })
+            } else {
+                res.json({
+                    message: 'Datos incorrecto'
+                })
+            }
+        } else {
+            res.json({ message: 'Datos incorrecto' })
+        }
+    } catch (error) {
+        res.json({
+            message: 'Ocurrio un error al intentar ingresar al sistema',
+            error
+        })
+    }
 
-    // if (user == 'admin' && password == '123') {
-    //     const passwordHash = await bcryptjs.hash(password, 8);
-
-
-
-    //     res.json({
-    //         message: 'Usuario autenticado',
-    //         passwordHash
-    //     })
-    // } else {
-    //     res.json({
-    //         message: 'Datos Incorrecto'
-    //     })
-    // }
-
-
-    res.send({ message: 'Usuario Creado correctamente' })
 }
 
 
 
 
 
-module.exports = { getUsuarios, setUsuario } 
+module.exports = { getUsuarios, setUsuario, login } 

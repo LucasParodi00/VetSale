@@ -4,13 +4,15 @@ import axios from "axios";
 
 export const productosApi = axios.create({
     baseURL: 'http://localhost:4000',
-
 });
 
-export const getProductos = async (page = 10, limite, productoEstado) => {
+export const getProductos = async (page = 10, limite, productoEstado, busqueda = '') => {
+    console.log('campo api: ', busqueda, 'Pagina: ', page, 'Limite: ', limite, 'Estado: ', productoEstado);
     try {
-        const { data } = await productosApi.get(`/productos?limite=${limite}&pagina=${page}&v_estado=${productoEstado}`);
+        const { data } = await productosApi.get(`/productos?limite=${limite}&pagina=${page}&v_estado=${productoEstado}&busqueda=${busqueda}`);
+        console.log(data);
         return data;
+
     } catch (error) {
         return error
     }
@@ -22,6 +24,15 @@ export const getProducto = async (codProducto = 1) => {
         return data;
     } catch (error) {
         return { message: 'Error al obtener el producto', error }
+    }
+}
+
+export const getProductosFilter = async () => {
+    try {
+        const { data } = await productosApi.get(`/productos/filtro?busqueda=${busqueda}&v_estado=${productoEstado}`)
+        return data;
+    } catch (error) {
+        return { message: 'Error al filtrar el producto', error }
     }
 }
 
@@ -51,7 +62,12 @@ export const setProducto = async (nuevoProducto) => {
 };
 
 export const updateProducto = async (nuevoProducto) => {
+    const datosImagen = nuevoProducto.imagen;
     try {
+        const { data } = await setImagen(datosImagen);
+        console.log('enlace de imagen: ', data);
+        nuevoProducto.imagen = data;
+
         const responce = await productosApi.put(`/productos/${nuevoProducto.codProducto}`, nuevoProducto)
         return responce.data.message;
     } catch (error) {

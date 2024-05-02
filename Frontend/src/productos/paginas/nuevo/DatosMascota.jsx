@@ -1,7 +1,8 @@
-import { Box, Button, Checkbox, FormControlLabel, FormGroup, Grid, Input, TextField, Typography } from "@mui/material"
+import { Box, Button, Checkbox, FormControlLabel, FormGroup, FormHelperText, Grid, Input, TextField, Typography } from "@mui/material"
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { validacion } from "../../../componetes/validaciones";
 
 
 
@@ -9,7 +10,7 @@ export const DatosMascota = ({ nuevoProducto, setNuevoProducto, progreso, setPro
     const navigate = useNavigate();
     const [codMascotas, setcodMascotas] = useState(nuevoProducto.codMascotas ? nuevoProducto.codMascotas.map(String) : []);
     const [codEdades, setcodEdades] = useState(nuevoProducto.codEdades ? nuevoProducto.codEdades.map(String) : []);
-    const { handleSubmit, register } = useForm({ defaultValues: nuevoProducto });
+    const { handleSubmit, register, formState: { errors } } = useForm({ defaultValues: nuevoProducto });
 
 
     useEffect(() => {
@@ -97,8 +98,11 @@ export const DatosMascota = ({ nuevoProducto, setNuevoProducto, progreso, setPro
 
                         <Input
                             type="file"
-                            {...register('imagen')}
+                            variant="outlined"
+                            error={!!errors.imagen}
+                            {...register('imagen', validacion.imagen)}
                         />
+                        {errors.imagen && <FormHelperText> {errors.imagen?.message} </FormHelperText>}
                         {/* <TextField
                             type="file"
                         /> */}

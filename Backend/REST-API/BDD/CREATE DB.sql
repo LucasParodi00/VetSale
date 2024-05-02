@@ -136,3 +136,9 @@ CREATE TABLE
         PRIMARY KEY (codCompraDetalle, codCompra),
         FOREIGN KEY (codProducto) REFERENCES producto (codProducto)
     );
+
+CREATE TABLE 
+    storage (
+        url VARCHAR (100),
+        fileName VARCHAR (100)
+    );

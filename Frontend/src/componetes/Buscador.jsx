@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
 import { Search } from "@mui/icons-material";
 import { InputAdornment, TextField } from "@mui/material";
+import { ButonVerde } from "./Botones";
+import { useState } from "react";
 
 
 
@@ -48,18 +50,26 @@ const InputBuscador = styled(TextField)({
   },
 });
 
-export const Buscador = ({ parametro, onChange }) => {
+
+export const Buscador = ({ parametro }) => {
+
+
+
+
 
   return (
-    <InputBuscador
-      label={
-        <>
-          <Search style={{ verticalAlign: 'middle' }} /> Buscar {parametro}
-        </>
-      }
-      variant="outlined"
-      onChange={onChange}
-    />
+    <form style={{ display: 'flex', width: 'auto' }}>
+      <InputBuscador
+        label={
+          <>
+            <Search style={{ verticalAlign: 'middle' }} /> Buscar {parametro}
+          </>
+        }
+        variant="outlined"
+        onChange={onChange}
+      />
+      <ButonVerde onSubmit={buscador}>Buscar</ButonVerde>
+    </form>
   );
 };
 

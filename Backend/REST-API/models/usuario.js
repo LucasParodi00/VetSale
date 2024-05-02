@@ -30,10 +30,6 @@ const Usuario = sequelize.define('usuario', {
     codTipoUsuario: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-            model: TipoUsuario,
-            key: 'codTipoUsuario'
-        }
     },
     user: {
         type: DataTypes.STRING(100),
@@ -45,5 +41,18 @@ const Usuario = sequelize.define('usuario', {
         timestamps: false
     },
 );
+
+Usuario.belongsTo(TipoUsuario, { foreignKey: 'codTipoUsuario', as: 'tipoUsuario' });
+Usuario.findAllData = function () {
+    return Usuario.findAll({
+        include: [
+            {
+                model: TipoUsuario,
+                as: 'tipoUsuario'
+            }
+
+        ]
+    })
+}
 
 module.exports = Usuario;

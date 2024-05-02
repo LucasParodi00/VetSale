@@ -10,17 +10,17 @@ const Tamanio = require('../models/tamanio');
 const Producto = require('../models/producto');
 const ProductoEdad = require('../models/productoEdad');
 const ProductoMascota = require('../models/productoMascota');
-const { where } = require('sequelize');
+const { where, Op } = require('sequelize');
 
 const getProductos = async (req, res) => {
     try {
-        const { pagina, limite, v_estado } = req.query;
-        console.log('parametros: ', req.query);
+        const { pagina, limite, v_estado, busqueda } = req.query;
         const estado = v_estado === 'true' ? true : false;
         const offset = (parseInt(pagina) - 1) * limite;
-        console.log('pagina: ', pagina, 'limite: ', limite, 'offset: ', offset, 'estado: ', v_estado);
+        console.log('pagina: ', pagina, 'limite: ', limite, 'offset: ', offset, 'estado: ', estado, 'Busqueda: ', busqueda);
         const productos = await Producto.findAllData({
             offset,
+            busqueda,
             limit: parseInt(limite),
             estado
         });
@@ -30,6 +30,28 @@ const getProductos = async (req, res) => {
         manejadorErrores(res, `Ocurrio un error aca: ${e}`);
     }
 };
+
+// const getProductosFilter = async (req, res) => {
+//     try {
+//         const { v_estado, busqueda } = req.query;
+//         const estado = v_estado === 'true' ? true : false;
+//         console.log('Estado: ', estado, 'Busqueda: ', busqueda);
+
+//         const codicionesFiltrado = {
+//             estado,
+//             [Op.or]: [
+//                 { nombre: { [Op.like]: `%${busqueda}` } },
+//                 { codProducto: { [Op.like]: `%${busqueda}` } }
+//             ]
+//         };
+
+//         const productos = await Producto.findAllData({ where: codicionesFiltrado });
+//         res.json(productos)
+
+//     } catch (error) {
+//         manejadorErrores(res, `Ocurrio un error aca: ${error}`);
+//     }
+// }
 
 const getProducto = async (req, res) => {
     try {
@@ -43,6 +65,7 @@ const getProducto = async (req, res) => {
         manejadorErrores(res, `Ocurrio un error al buscar el producto: ${e}`);
     }
 }
+
 
 const setProductos = async (req, res) => {
     try {
@@ -62,10 +85,10 @@ const setProductos = async (req, res) => {
             await ProductoMascota.create({ codProducto: productoCreado.codProducto, codMascota }); // Informacion de las mascotas
         }));
 
-        res.send({ message: `Producto creado correctamente.` });
+        res.send({ message: `Producto agregado correctamente.` });
 
     } catch (e) {
-        manejadorErrores(res, `Ocurrio un error al cargar el producto: ${e}`);
+        manejadorErrores(res, `Datos incorrecto: ${e}`);
         console.log('error al cargar el producto' + e);
     }
 };
@@ -88,9 +111,9 @@ const updateProducto = async (req, res) => {
         await Promise.all(body.codMascotas.map(async (codMascota) => {
             await ProductoMascota.create({ codProducto: body.codProducto, codMascota });
         }));
-        res.send({ message: `El producto ${id} se actualizo correctamente.` });
+        res.send({ message: `Datos modificado correctamente` });
     } catch (error) {
-        manejadorErrores(res, `Ocurrio un error al actualizar el producto: ${error}`)
+        manejadorErrores(res, `Datos incorrecto: ${error}`)
     }
 }
 

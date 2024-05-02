@@ -1,7 +1,7 @@
 
 
 // models/Producto.js
-const { DataTypes } = require('sequelize');
+const { DataTypes, Op } = require('sequelize');
 const { sequelize } = require('../config/database');
 const Categoria = require('./categoria');
 const Tamanio = require('./tamanio');
@@ -95,10 +95,20 @@ Edad.belongsToMany(Producto, { through: ProductoEdad, foreignKey: 'codEdad' });
 Producto.belongsToMany(Mascota, { through: ProductoMascota, foreignKey: 'codProducto', as: 'mascotas' });
 Mascota.belongsToMany(Producto, { through: ProductoMascota, foreignKey: 'codMascota' });
 
-Producto.findAllData = function ({ offset, limit, estado }) {
-    console.log('Tu estado: ', estado);
+Producto.findAllData = function ({ offset, limit, estado, busqueda }) {
+    let filtro = { estado }
+    if (busqueda) {
+        filtro = {
+            ...filtro,
+            [Op.or]: [
+                { codProducto: { [Op.like]: '%' + busqueda + '%' } },
+                { nombre: { [Op.like]: '%' + busqueda + '%' } }
+            ]
+        }
+    }
+
     return Producto.findAll({
-        where: { estado },
+        where: filtro,
         include: [
             {
                 model: Categoria,

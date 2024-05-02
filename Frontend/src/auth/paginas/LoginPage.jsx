@@ -38,7 +38,7 @@ export const LoginPage = () => {
                                     <InputBlanco {...register('password')} label="Password" fullWidth type="password" />
                                 </Grid>
                                 <Grid marginTop={10}>
-                                    <FormControlLabel control={<Checkbox />} label="Manetener la sesion iniciada" />
+                                    <FormControlLabel control={<Checkbox />} label="Mantener la sesion iniciada" />
                                 </Grid>
                                 <Grid marginTop={10} textAlign='center'>
                                     <ButonAzul type="submit">Iniciar Sesion</ButonAzul>

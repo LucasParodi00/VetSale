@@ -16,7 +16,6 @@ export const CardProducto = ({ nuevoProducto }) => {
     const [retorno, setRetorno] = useState(valoresCard(codCategoria, codMascotas, codEdades, codTamanio))
     const [c, m, e, t] = retorno;
 
-
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
@@ -25,7 +24,7 @@ export const CardProducto = ({ nuevoProducto }) => {
         setRetorno(valoresCard(codCategoria, codMascotas, codEdades, codTamanio))
     }, [nuevoProducto])
 
-
+    console.log(nombreMascotas);
     return (
         <Card>
             <CardHeader
@@ -33,16 +32,16 @@ export const CardProducto = ({ nuevoProducto }) => {
                     <Avatar> <ShoppingBag /> </Avatar>
                 }
                 title={nombre}
-                subheader={c + nombreCategoria ? nombreCategoria : ''}
+                subheader={retorno[0]}
             />
             <CardContent>
                 <Typography> Stock: <b>{stock}</b> </Typography>
                 <Typography> Peso: <b>{peso}</b> </Typography>
-                <Typography> Tamaño: <b>{t + nombreTamanio ? nombreTamanio : ''}</b> </Typography>
+                <Typography> Tamaño: <b>{retorno[3]}</b> </Typography>
                 <Typography> Cantidad: <b>{cantidad}</b> </Typography>
                 <Typography> Mililitro: <b>{mililitro}</b> </Typography>
-                <Typography> Para: <b>{m + nombreMascotas ? nombreMascotas : ''}</b> </Typography>
-                <Typography> Edad: <b>{e + nombreEdades ? nombreEdades : ''}</b> </Typography>
+                <Typography> Para: <b>{retorno[1]}</b> </Typography>
+                <Typography> Edad: <b>{retorno[2]}</b> </Typography>
                 <hr />
                 <Typography> Precio Contado: <b>$ {precioContado}</b> </Typography>
                 <Typography> Precio Lista: <b>$ {precioLista}</b> </Typography>
@@ -53,7 +52,7 @@ export const CardProducto = ({ nuevoProducto }) => {
                 <ExpandMore expand={expanded.toString()} onClick={handleExpandClick} aria-expanded={expanded} aria-label="Descripcion"><ExpandMore /></ExpandMore>
             </CardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <CardContent>
+                <CardContent sx={{ overflow: 'scroll' }}>
                     <Typography paragraph>
                         {descripcion}
                     </Typography>
