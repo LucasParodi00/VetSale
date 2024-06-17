@@ -31,8 +31,8 @@ const Venta = sequelize.define('venta', {
         type: DataTypes.DATE,
         allowNull: false
     },
-    montoTotal: { // deje el campo para almacenar el monto total de la venta, por el tema del recargo
-        type: DataTypes.DECIMAL(10, 2), // Decimal con 10 dígitos en total y 2 dígitos para decimales
+    montoTotal: { // Deje el campo para almacenar el monto total de la venta, por el tema del recargo
+        type: DataTypes.VARCHAR(100),
         allowNull: false
     }
 }, {

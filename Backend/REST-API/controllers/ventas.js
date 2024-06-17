@@ -13,7 +13,7 @@ const {sequelize} = require('../config/database'); // Importa la instancia de Se
 const { ventaValidations, validateVenta } = require('../validators/ventas');
 const ventasPorFechaValidations = require('../validators/ventaFechaValidate');
 
-const crearVenta = async (req, res) => {
+const createVenta = async (req, res) => {
     const { opcionPago, codUsuario, detalleVenta } = req.body;
     const transaction = await sequelize.transaction();
 
@@ -95,7 +95,7 @@ const crearVenta = async (req, res) => {
 
 
 // Función para obtener detalles de una venta por id
-const obtenerVentaPorId = async (req, res) => {
+const getVenta = async (req, res) => {
     try {
         const codVenta = req.params.codVenta; // Usamos req.params.codVenta en lugar de req.query.id
         const venta = await Venta.findByPk(codVenta, {
@@ -114,61 +114,89 @@ const obtenerVentaPorId = async (req, res) => {
 };
 
 
-// Función para poder filtrar las ventas por fechas
-const listarVentasPorFecha = async (req, res) => {
-    try {
-        const { fecha1, fecha2 } = req.query;
+// // Función para poder filtrar las ventas por fechas
+// const listarVentasPorFecha = async (req, res) => {
+//     try {
+//         const { fecha1, fecha2 } = req.query;
 
-        console.log("Fecha 1 (input):", fecha1);
-        console.log("Fecha 2 (input):", fecha2);
+//         console.log("Fecha 1 (input):", fecha1);
+//         console.log("Fecha 2 (input):", fecha2);
 
-        if (!fecha1 || !fecha2) {
-            return res.status(400).json({ error: 'Se requieren ambas fechas para filtrar las ventas' });
-        }
+//         if (!fecha1 || !fecha2) {
+//             return res.status(400).json({ error: 'Se requieren ambas fechas para filtrar las ventas' });
+//         }
 
-        // Convertir las fechas de DD/MM/YYYY a YYYY-MM-DD
-        const fechaInicio = moment(fecha1, 'DD/MM/YYYY').format('YYYY-MM-DD');
-        const fechaFin = moment(fecha2, 'DD/MM/YYYY').format('YYYY-MM-DD');
+//         // Convertir las fechas de DD/MM/YYYY a YYYY-MM-DD
+//         const fechaInicio = moment(fecha1, 'DD/MM/YYYY').format('YYYY-MM-DD');
+//         const fechaFin = moment(fecha2, 'DD/MM/YYYY').format('YYYY-MM-DD');
 
-        console.log("Fecha Inicio Convertida:", fechaInicio);
-        console.log("Fecha Fin Convertida:", fechaFin);
+//         console.log("Fecha Inicio Convertida:", fechaInicio);
+//         console.log("Fecha Fin Convertida:", fechaFin);
 
-        if (!moment(fechaInicio, 'YYYY-MM-DD', true).isValid() || !moment(fechaFin, 'YYYY-MM-DD', true).isValid()) {
-            return res.status(400).json({ error: 'Las fechas deben estar en el formato DD/MM/YYYY' });
-        }
+//         if (!moment(fechaInicio, 'YYYY-MM-DD', true).isValid() || !moment(fechaFin, 'YYYY-MM-DD', true).isValid()) {
+//             return res.status(400).json({ error: 'Las fechas deben estar en el formato DD/MM/YYYY' });
+//         }
 
-        // Ajustar las fechas para cubrir todo el día en UTC
-        const fechaInicioAdjusted = moment.utc(fechaInicio).startOf('day').toDate();
-        const fechaFinAdjusted = moment.utc(fechaFin).endOf('day').toDate();
+//         // Ajustar las fechas para cubrir todo el día en UTC
+//         const fechaInicioAdjusted = moment.utc(fechaInicio).startOf('day').toDate();
+//         const fechaFinAdjusted = moment.utc(fechaFin).endOf('day').toDate();
 
-        console.log("Fecha Inicio Ajustada:", fechaInicioAdjusted);
-        console.log("Fecha Fin Ajustada:", fechaFinAdjusted);
+//         console.log("Fecha Inicio Ajustada:", fechaInicioAdjusted);
+//         console.log("Fecha Fin Ajustada:", fechaFinAdjusted);
 
-        const ventas = await Venta.findAll({
-            where: { 
-                fecha: { 
-                    [Op.between]: [fechaInicioAdjusted, fechaFinAdjusted] 
-                } 
-            }
-        });
+//         const ventas = await Venta.findAll({
+//             where: { 
+//                 fecha: { 
+//                     [Op.between]: [fechaInicioAdjusted, fechaFinAdjusted] 
+//                 } 
+//             }
+//         });
 
-        console.log("Ventas encontradas:", ventas);
+//         console.log("Ventas encontradas:", ventas);
 
-        if (ventas.length === 0) {
-            return res.status(404).json({ error: 'No se encontraron ventas en el rango de fechas proporcionado' });
-        }
+//         if (ventas.length === 0) {
+//             return res.status(404).json({ error: 'No se encontraron ventas en el rango de fechas proporcionado' });
+//         }
 
-        res.json(ventas);
-    } catch (error) {
-        console.error('Error al listar ventas por fecha:', error);
-        manejadorErrores(res, 'Error al listar ventas por fecha', 500);
-    }
-};
+//         res.json(ventas);
+//     } catch (error) {
+//         console.error('Error al listar ventas por fecha:', error);
+//         manejadorErrores(res, 'Error al listar ventas por fecha', 500);
+//     }
+// };
 
 // Función para listar todas las ventas
-const listarVentas = async (req, res) => {
+const getVentas = async (req, res) => {
     try {
-        const ventas = await Venta.findAll();
+        const { fecha1, fecha2 } = req.query;
+        let whereClause = {};
+
+        if (fecha1 && fecha2) {
+            console.log("Fecha 1 (input):", fecha1);
+            console.log("Fecha 2 (input):", fecha2);
+
+            const fechaInicio = moment(fecha1, 'DD/MM/YYYY').format('YYYY-MM-DD');
+            const fechaFin = moment(fecha2, 'DD/MM/YYYY').format('YYYY-MM-DD');
+
+            console.log("Fecha Inicio Convertida:", fechaInicio);
+            console.log("Fecha Fin Convertida:", fechaFin);
+
+            if (!moment(fechaInicio, 'YYYY-MM-DD', true).isValid() || !moment(fechaFin, 'YYYY-MM-DD', true).isValid()) {
+                return res.status(400).json({ error: 'Las fechas deben estar en el formato DD/MM/YYYY' });
+            }
+
+            const fechaInicioAdjusted = moment.utc(fechaInicio).startOf('day').toDate();
+            const fechaFinAdjusted = moment.utc(fechaFin).endOf('day').toDate();
+
+            console.log("Fecha Inicio Ajustada:", fechaInicioAdjusted);
+            console.log("Fecha Fin Ajustada:", fechaFinAdjusted);
+
+            whereClause.fecha = {
+                [Op.between]: [fechaInicioAdjusted, fechaFinAdjusted]
+            };
+        }
+
+        const ventas = await Venta.findAll({ where: whereClause });
 
         if (ventas.length === 0) {
             return res.status(404).json({ mensaje: 'No se encontraron ventas.' });
@@ -182,8 +210,8 @@ const listarVentas = async (req, res) => {
 };
 
 module.exports = {
-    crearVenta,
-    obtenerVentaPorId,
+    createVenta,
+    getVenta,
     listarVentasPorFecha,
-    listarVentas
+    getVentas
 };

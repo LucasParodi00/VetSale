@@ -18,7 +18,7 @@ const Compra = sequelize.define('compra', {
         defaultValue: DataTypes.NOW
     },
     montoTotal: {
-        type: DataTypes.STRING(100)
+        type: DataTypes.VARCHAR(100),
     }
 },{
         tableName: 'compra', // especificamos el nombre de la tabla ya que me detecta en plural

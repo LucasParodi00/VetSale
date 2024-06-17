@@ -161,8 +161,4 @@ const deleteProducto = async (req, res) => {
     }
 }
 
-
-
-
-
 module.exports = { getProductos, setProductos, getProducto, updateProducto, deleteProducto };

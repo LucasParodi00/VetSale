@@ -11,7 +11,7 @@ const TipoPago = sequelize.define('tipo_pago', {
         type: DataTypes.STRING(100)
     },
     recargo: {
-        type: DataTypes.DECIMAL,
+        type: DataTypes.DOUBLE(6,2), 
         allowNull: true
     }
 }, {

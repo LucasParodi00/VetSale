@@ -3,19 +3,17 @@
 const express = require('express');
 const router = express.Router();
 const {
-    crearVenta,
-    obtenerVentaPorId,
-    listarVentasPorFecha,
-    listarVentas
+    createVenta,
+    getVenta,
+    getVentas,
 } = require('../controllers/ventas');
 
 const { ventaValidations, validateVenta } = require('../validators/ventas');
 const ventasPorFechaValidations = require('../validators/ventaFechaValidate');
 
-router.post('/', ventaValidations,  validateVenta, crearVenta);
-router.get('/', listarVentas);
-router.get('/filtrar', ventasPorFechaValidations, validateVenta, listarVentasPorFecha);
-router.get('/:codVenta', obtenerVentaPorId);
+router.post('/', ventaValidations,  validateVenta, createVenta);
+router.get('/', getVentas);
+router.get('/:codVenta', getVenta); //Obtiene por ID
 
 
 module.exports = router;
