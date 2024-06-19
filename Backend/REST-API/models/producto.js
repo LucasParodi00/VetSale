@@ -63,12 +63,12 @@ const Producto = sequelize.define('producto', {
         allowNull: true,
         defaultValue: 0
     },
-    precioContado: {
+    precioVenta: {
         type: DataTypes.STRING(100),
         allowNull: true,
         defaultValue: 0
     },
-    precioLista: {
+    precioCompra: {
         type: DataTypes.STRING(100),
         allowNull: true,
         defaultValue: 0
@@ -77,7 +77,12 @@ const Producto = sequelize.define('producto', {
         type: DataTypes.STRING(100),
         allowNull: true,
         defaultValue: 0
-    }
+    },
+    pesoTotal: {
+        type: DataTypes.STRING(100),
+        allowNull: true,
+        defaultValue: 0
+    },
 },
     {
         tableName: 'producto',
@@ -159,13 +164,13 @@ Producto.findProductData = function ({ where }) {
                 model: Edad,
                 as: 'edades',
                 through: { attributes: [] },
-                attributes: ['codEdad']
+                attributes: ['codEdad', 'nombreEdad']
             },
             {
                 model: Mascota,
                 as: 'mascotas',
                 through: { attributes: [] },
-                attributes: ['codMascota']
+                attributes: ['codMascota', 'nombreMascota']
             }
         ]
     }).then(producto => {
@@ -173,6 +178,10 @@ Producto.findProductData = function ({ where }) {
             const productoConDatos = producto.toJSON();
             productoConDatos.codEdades = producto.edades.map(edad => edad.codEdad);
             productoConDatos.codMascotas = producto.mascotas.map(mascota => mascota.codMascota);
+
+            productoConDatos.nombreEdades = producto.edades.map(edad => edad.nombreEdad).join(' - ');
+            productoConDatos.nombreMascotas = producto.mascotas.map(mascota => mascota.nombreMascota).join(' - ');
+
             return productoConDatos;
         } else {
             return null;

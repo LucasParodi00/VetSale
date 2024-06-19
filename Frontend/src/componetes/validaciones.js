@@ -41,7 +41,8 @@ export const validacion = {
     },
     stock: {
         required: { value: true, message: 'Ingrese el stock' },
-        pattern: { value: /^[0-9]+$/, message: 'Ingrese un número válido' }
+        pattern: { value: /^[0-9]+$/, message: 'Ingrese un número válido' },
+        maxLength: { value: 3, message: 'Maximo 999' },
     },
     imagen: {
         require: { value: true, message: 'Debe seleccionar una imagen' },
@@ -57,9 +58,5 @@ export const validacion = {
             }
         }
     }
-
-
-
-
 
 };

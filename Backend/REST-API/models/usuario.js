@@ -43,8 +43,26 @@ const Usuario = sequelize.define('usuario', {
 );
 
 Usuario.belongsTo(TipoUsuario, { foreignKey: 'codTipoUsuario', as: 'tipoUsuario' });
-Usuario.findAllData = function () {
+Usuario.findAllData = function ({ estadoUsuario }) {
     return Usuario.findAll({
+        where: {
+            estado: estadoUsuario
+        },
+        include: [
+            {
+                model: TipoUsuario,
+                as: 'tipoUsuario'
+            }
+
+        ]
+    })
+}
+
+Usuario.findUser = function ({ usuario }) {
+    return Usuario.findOne({
+        where: {
+            user: usuario
+        },
         include: [
             {
                 model: TipoUsuario,

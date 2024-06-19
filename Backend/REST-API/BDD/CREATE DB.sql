@@ -56,9 +56,10 @@ CREATE TABLE
         estado BOOLEAN DEFAULT TRUE,
         imagen VARCHAR(200) NULL,
         stock INT NULL,
-        precioContado VARCHAR(100) NULL,
-        precioLista VARCHAR(100) NULL,
+        precioCompra VARCHAR (100) NULL,
+        precioVenta VARCHAR(100) NULL,
         precioSuelto VARCHAR(100) NULL,
+        pesoTotal VARCHAR (100) NULL,
         FOREIGN KEY (codTamanio) REFERENCES tamanio (codTamanio),
         FOREIGN KEY (codCategoria) REFERENCES categoria (codCategoria)
     );
@@ -84,7 +85,9 @@ CREATE TABLE
 CREATE TABLE
     tipo_pago (
         codTipoPago INT PRIMARY KEY AUTO_INCREMENT,
-        nombreTipoPago VARCHAR(100)
+        nombreTipoPago VARCHAR(100),
+        recargo DOUBLE (5,2),
+        estado BOOLEAN DEFAULT TRUE
     );
 
 CREATE TABLE
@@ -104,9 +107,10 @@ CREATE TABLE
         codVentaDetalle INT AUTO_INCREMENT,
         codVenta INT,
         codProducto INT,
-        cantidad INT,
+        cantidad DOUBLE (7,3) ,
         precioUnitario VARCHAR(100),
         subTotal VARCHAR(100),
+        tipoVenta INT, 
         PRIMARY KEY (codVentaDetalle, codVenta),
         FOREIGN KEY (codProducto) REFERENCES producto (codProducto),
         FOREIGN KEY (codVenta) REFERENCES venta (codVenta)
@@ -128,8 +132,7 @@ CREATE TABLE
         codCompra INT,
         codProducto INT,
         precioCompra VARCHAR(100),
-        precioContado VARCHAR(100),
-        precioLista VARCHAR(100),
+        precioVenta VARCHAR(100),
         precioSuelto VARCHAR(100),
         cantidad INT,
         subTotal VARCHAR(100),

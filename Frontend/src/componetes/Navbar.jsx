@@ -1,23 +1,29 @@
-import { Home, List, Person, ShoppingCart } from "@mui/icons-material";
+import { ExitToApp, Home, List, Person, ShoppingCart } from "@mui/icons-material";
 import { Link, NavLink } from "react-router-dom";
+import { MenuDrop } from "./varios";
+import { useSelector } from "react-redux";
 
 
 
 export const Navbar = () => {
+
+    const usuario = useSelector(state => state.auth.usuario);
+
+
     return (
         <div className='contenedorNav'>
             <nav className='navbar'>
                 <Link
                     className='navItem'
-                    to='/ventas' 
+                    to='/ventas'
                 >
                     VetSale <Home />
                 </Link>
                 <div className='navSecciones'>
-                    <NavLink 
+                    <NavLink
                         className='navItem'
                         to='/productos'
-                        >
+                    >
                         Productos <List />
                     </NavLink>
 
@@ -36,14 +42,9 @@ export const Navbar = () => {
                     </NavLink>
                 </div>
                 <div>
-                    <NavLink
-                        className='navItem'
-                        to='/ventas'
-                    >
-                         <i className="fa-solid fa-arrow-right-from-bracket"></i>
-                    </NavLink>
+                    <MenuDrop />
                 </div>
             </nav>
         </div>
-    ) 
+    )
 };

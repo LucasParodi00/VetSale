@@ -1,34 +1,42 @@
-import { Box, Container, Grid, Typography } from "@mui/material";
-import { ContenedorLayout } from "../../layout/";
-import { Buscador, ButonAmarillo, ButonVerde, SectionHeader } from "../../componetes";
+import { Box, Container } from "@mui/material";
+import { ButonAmarillo, ButonVerde, SectionHeader } from "../../componetes";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getUsuarios } from "../../api/usuariosApi";
+import { deleteUsuario, getUsuarios } from "../../api/usuariosApi";
 import { ItemUsuario } from "../componentes";
-
-
-
+import useSnackbarSimple from "../../componetes/varios/Snackbar";
 
 export const ListUsuarios = () => {
-    const [eliminados, setEliminados] = useState(true);
+    const [estadoUsuario, setEstadoUsuario] = useState(true);
     const [usuarios, setUsuarios] = useState([]);
     const [cargando, setCargando] = useState(true);
+    const { ComponenteSnackbar, handleOpen } = useSnackbarSimple();
 
     const usuariosEliminados = () => {
-        eliminados
-        console.log('Usuarios eliminados');
+        setEstadoUsuario(!!!estadoUsuario);
     }
 
     const buscarUsuario = () => {
         console.log('Buscando Usuario');
     }
 
+    const bajaUsuario = async (codUsuario) => {
+        console.log('Eliminando Usuario: ', codUsuario);
+        try {
+            const { message } = await deleteUsuario(codUsuario);
+            handleOpen(message);
+            setUsuarios(usuarios.filter(usuario => usuario.codUsuario !== codUsuario));
+        } catch (error) {
+            console.log('Error al eliminar el usuario');
+        }
+
+    }
+
     useEffect(() => {
         const listaUsuarios = async () => {
             try {
-                const resultadoUsuarios = await getUsuarios();
+                const resultadoUsuarios = await getUsuarios(estadoUsuario);
                 setUsuarios(resultadoUsuarios);
-                console.log(resultadoUsuarios);
             }
             catch (error) {
                 console.log('Error al cargar los usuarios');
@@ -37,26 +45,28 @@ export const ListUsuarios = () => {
             }
         }
         listaUsuarios()
-    }, [])
+    }, [estadoUsuario])
 
     return (
         <Container>
             <SectionHeader>
-                <Buscador parametro='usuarios' onChange={buscarUsuario} />
+                <div></div>
+                {/* <Buscador parametro='usuarios' onChange={buscarUsuario} /> */}
                 <Box>
                     <Link to={'nuevo'}> <ButonVerde> Nuevo Usuario </ButonVerde> </Link>
-                    <ButonAmarillo onClick={usuariosEliminados}> {eliminados ? 'Eliminados' : 'Activos'} </ButonAmarillo>
+                    <ButonAmarillo onClick={usuariosEliminados}> {estadoUsuario ? 'Eliminados' : 'Activos'} </ButonAmarillo>
                 </Box>
             </SectionHeader>
             {cargando ? <div>Cargando los usuarios </div> :
                 <div className="scroll">
                     {
-                        usuarios.map((usuario) => {
-                            return <ItemUsuario key={usuario.codUsuario} usuario={usuario} />
+                        usuarios.length > 1 && usuarios?.map((usuario) => {
+                            return <ItemUsuario key={usuario.codUsuario} usuario={usuario} bajaUsuario={bajaUsuario} />
                         })
                     }
                 </div>
             }
+            <ComponenteSnackbar />
         </Container >
     );
 }

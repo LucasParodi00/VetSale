@@ -2,6 +2,10 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 const Usuario = require('./usuario');
+const CompraDetalle = require('./compraDetalle');
+const Venta = require('./venta');
+const models = require('.');
+const Producto = require('./producto');
 
 const Compra = sequelize.define('compra', {
     codCompra: {
@@ -12,10 +16,6 @@ const Compra = sequelize.define('compra', {
     codUsuario: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-            model: Usuario,
-            key: 'codUsuario'
-        }
     },
     fecha: {
         type: DataTypes.DATE,
@@ -25,7 +25,48 @@ const Compra = sequelize.define('compra', {
         type: DataTypes.STRING(100),
         allowNull: false
     }
-});
+},
+    {
+        tableName: 'compra',
+        timestamps: false
+    }
+);
+
+Compra.hasMany(CompraDetalle, { foreignKey: 'codCompra' });
+Compra.belongsTo(Usuario, { foreignKey: 'codUsuario' });
+
+Compra.CompraDetallada = async (codCompra) => {
+    const unaCompra = await Compra.findOne({
+        where: { codCompra },
+        include: [
+            {
+                model: CompraDetalle,
+                attributes: [
+                    'cantidad',
+                    'codProducto',
+                    'subTotal',
+                    'precioCompra'
+                ],
+                include: {
+                    model: Producto,
+                    attributes: [
+                        'nombre'
+                    ]
+                }
+            },
+            {
+                model: Usuario,
+                attributes: [
+                    'nombreApellido'
+                ]
+            }
+        ]
+    })
+    if (!unaCompra) {
+        throw new Error('Compra no encontrada');
+    }
+    return unaCompra;
+}
 
 module.exports = Compra;
 

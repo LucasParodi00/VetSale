@@ -4,7 +4,7 @@ const { sequelize } = require('../config/database');
 const Producto = require('./producto');
 const Compra = require('./compra');
 
-const CompraDetalle = sequelize.define('compraDetalle', {
+const CompraDetalle = sequelize.define('compra_detalle', {
     codCompraDetalle: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -21,20 +21,12 @@ const CompraDetalle = sequelize.define('compraDetalle', {
     codProducto: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-            model: Producto,
-            key: 'codProducto'
-        }
     },
     precioCompra: {
         type: DataTypes.STRING(100),
         allowNull: false
     },
-    precioContado: {
-        type: DataTypes.STRING(100),
-        allowNull: false
-    },
-    precioLista: {
+    precioVenta: {
         type: DataTypes.STRING(100),
         allowNull: false
     },
@@ -50,6 +42,13 @@ const CompraDetalle = sequelize.define('compraDetalle', {
         type: DataTypes.STRING(100),
         allowNull: false
     }
-});
+},
+    {
+        tableName: 'compra_detalle',
+        timestamps: false
+    }
+);
+
+CompraDetalle.belongsTo(Producto, { foreignKey: 'codProducto' });
 
 module.exports = CompraDetalle;

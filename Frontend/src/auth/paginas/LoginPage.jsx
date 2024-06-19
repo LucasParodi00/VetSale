@@ -4,18 +4,45 @@ import { ContenedorLayout } from "../../layout/ContenedorLayout";
 import { ButonAzul, InputBlanco } from "../../componetes";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { login } from "../../api/usuariosApi";
+import { useDispatch, useSelector } from "react-redux";
+import { setAuth } from "../../redux/slices/auth/authSlice";
+import { useState } from "react";
 
 
 export const LoginPage = () => {
     const theme = useTheme()
-    const { root } = theme;
-
-    const { register, handleSubmit } = useForm();
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const onSubmit = (values) => {
-        console.log('eviando: ', values);
-        navigate('./productos')
+    const usuario = useSelector(state => state.auth.usuario);
+    const { register, handleSubmit } = useForm();
+    const { root } = theme;
+    const [mantenerSesion, setMantenerSesion] = useState(false);
+    const [message, setMessage] = useState('')
+
+
+    const onLogin = async (responce) => {
+        const { status, data: { message, datos } } = responce;
+        if (status === 200) {
+            dispatch(setAuth({ usuario: datos }));
+            (mantenerSesion) && localStorage.setItem('user', JSON.stringify(datos))
+            navigate('/ventas', { replace: true });
+        } else {
+            setMessage(message);
+            setTimeout(() => {
+                setMessage('')
+            }, 3000);
+        }
+    }
+
+    const onSubmit = async (values) => {
+        try {
+            const responce = await login(values);
+            await onLogin(responce);
+        } catch (error) {
+            setMessage('Error de conexion: ', error.message);
+        }
     }
     return (
         <>
@@ -36,9 +63,14 @@ export const LoginPage = () => {
                                 </Grid>
                                 <Grid marginTop={4}>
                                     <InputBlanco {...register('password')} label="Password" fullWidth type="password" />
+                                    <Typography variant="h6" color="error">{message}</Typography>
                                 </Grid>
                                 <Grid marginTop={10}>
-                                    <FormControlLabel control={<Checkbox />} label="Mantener la sesion iniciada" />
+                                    <FormControlLabel
+                                        control={<Checkbox />}
+                                        label="Mantener la sesion iniciada"
+                                        onChange={(e) => setMantenerSesion(e.target.checked)}
+                                    />
                                 </Grid>
                                 <Grid marginTop={10} textAlign='center'>
                                     <ButonAzul type="submit">Iniciar Sesion</ButonAzul>

@@ -72,8 +72,10 @@ const setProductos = async (req, res) => {
         //Implementar cuando tenga todas las validaciones 
         //const body = matchedData(req);
         const { body, file } = req;
-        const { codEdades, codMascotas } = body;
+        const { codEdades, codMascotas, peso, stock } = body;
 
+        const pesoTotal = peso * stock;
+        body.pesoTotal = pesoTotal;
         console.log(body);
         const productoCreado = await producto.create(body); // Informacion del producto
 
@@ -98,6 +100,11 @@ const updateProducto = async (req, res) => {
     try {
         const { id } = req.params;
         const { body } = req;
+
+        const { peso, stock } = body;
+        const pesoTotal = peso * stock;
+        body.pesoTotal = pesoTotal;
+
         console.log('Codigo del producto: ', id, 'Datos: ', body);
         await ProductoEdad.destroy({ where: { codProducto: id } })
         await ProductoMascota.destroy({ where: { codProducto: id } })
@@ -124,10 +131,16 @@ const deleteProducto = async (req, res) => {
         const { estado, ...data } = await producto.findByPk(id);
         if (estado === true) {
             await producto.update({ estado: false }, { where: { codProducto: id } });
-            res.send({ data });
+            res.json({
+                message: 'Producto eliminado correctamente',
+                data
+            });
         } else {
             await producto.update({ estado: true }, { where: { codProducto: id } });
-            res.send({ data });
+            res.json({
+                message: 'Producto restaurado correctamente',
+                data
+            });
         }
     } catch (error) {
         manejadorErrores(res, 'Ocurrio un error al eliminar el producto')

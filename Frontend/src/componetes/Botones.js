@@ -2,34 +2,36 @@ import styled from "@emotion/styled";
 import { Button } from "@mui/material";
 
 export const ButonAzul = styled(Button)({
+  height: '5rem',
+  boxShadow: 'none',
+  textTransform: 'none',
+  fontSize: 16,
+  padding: '.6rem 2rem',
+  border: '1px solid',
+  backgroundColor: '#3B57BC',
+  borderColor: '#0063cc',
+  fontWeight: 'bold',
+  borderRadius: '1.5rem',
+  color: '#FFF',
+  '&:hover': {
+    backgroundColor: '#0069d9',
+    borderColor: '#0062cc',
     boxShadow: 'none',
-    textTransform: 'none',
-    fontSize: 16,
-    padding: '.6rem 2rem',
-    border: '1px solid',
-    backgroundColor: '#3B57BC',
-    borderColor: '#0063cc',
-    fontWeight: 'bold',
-    borderRadius: '1.5rem',
-    color: '#FFF',
-    '&:hover': {
-      backgroundColor: '#0069d9',
-      borderColor: '#0062cc',
-      boxShadow: 'none',
-    },
-    '&:active': {
-      boxShadow: 'none',
-      backgroundColor: '#0062cc',
-      borderColor: '#005cbf',
-    },
-    '&:focus': {
-      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
-    },
-  });
+  },
+  '&:active': {
+    boxShadow: 'none',
+    backgroundColor: '#0062cc',
+    borderColor: '#005cbf',
+  },
+  '&:focus': {
+    boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
+  },
+});
 
 
-  
+
 export const ButonAmarillo = styled(Button)({
+  height: '5rem',
   boxShadow: 'none',
   textTransform: 'none',
   fontSize: 18,
@@ -54,8 +56,9 @@ export const ButonAmarillo = styled(Button)({
   },
 });
 
- 
+
 export const ButonVerde = styled(Button)({
+  height: '5rem',
   boxShadow: 'none',
   textTransform: 'none',
   fontSize: 18,

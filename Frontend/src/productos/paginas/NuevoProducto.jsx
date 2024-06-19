@@ -1,4 +1,4 @@
-import { Container, Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import { DatosCategoria, DatosMascota, DatosPrecio, DatosPrincipal, FinNuevoProducto } from "./";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -6,6 +6,8 @@ import { useTheme } from "@emotion/react";
 
 import { CardProducto } from "../componentes/CardProducto";
 import { getProducto } from "../../api/productos/productosApi";
+import { ContenedorFormulariosPrincipales } from "../../layout/ContenedorFormulariosPrincipales";
+import { TituloFormularioPrincipales } from "../../componetes";
 
 export const NuevoProducto = ({ producto }) => {
     const [nuevoProducto, setNuevoProducto] = useState({
@@ -20,8 +22,8 @@ export const NuevoProducto = ({ producto }) => {
         mililitro: '',
         codMascotas: '',
         codEdades: '',
-        precioContado: '',
-        precioLista: '',
+        precioCompra: '',
+        precioVenta: '',
         precioSuelto: '',
         imagen: {}
     });
@@ -59,8 +61,8 @@ export const NuevoProducto = ({ producto }) => {
 
 
     return (
-        <Container className="animate__animated animate__bounceInRight" sx={{ backgroundColor: `${root.verdeClaro}`, padding: '1rem', margin: '1rem auto', borderRadius: '.5rem', minHeight: '60vh' }}>
-            <Typography variant="h1" textAlign={'center'} sx={{ fontSize: '3rem', fontWeight: 'bold' }}> Nuevo Producto | {progreso} / 3</Typography>
+        <ContenedorFormulariosPrincipales>
+            <TituloFormularioPrincipales titulo={`Nuevo Producto | Progreso ${progreso} / 3`} />
             <Grid container spacing={1} sx={{ padding: '1.5rem', placeItems: 'center', minHeight: '60vh' }}>
                 <Grid item sm={8}>
                     <Routes>
@@ -75,6 +77,6 @@ export const NuevoProducto = ({ producto }) => {
                     <CardProducto nuevoProducto={nuevoProducto} />
                 </Grid>
             </Grid>
-        </Container>
+        </ContenedorFormulariosPrincipales>
     )
 }

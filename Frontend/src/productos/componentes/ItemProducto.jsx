@@ -1,16 +1,14 @@
 import { DeleteForever, ModeEdit } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
-import { deleteProducto } from "../../api/productos/productosApi";
+// import { deleteProducto } from "../../api/productos/productosApi";
 
 
-export const ItemProducto = ({ productos, verProducto, productoEstado }) => {
-    const { codProducto, nombre, stock, precioContado, precioLista, precioSuelto, nombreMascotas, nombreEdades } = productos;
+export const ItemProducto = ({ productos, verProducto, productoEstado, eliminarProducto }) => {
+    const { codProducto, nombre, stock, precioVenta, precioSuelto, nombreMascotas, nombreEdades } = productos;
 
-    const eliminarProducto = async () => {
-        const responce = await deleteProducto(codProducto);
-        console.log(responce);
-        // return deleteProducto;
+    const handleEliminarProducto = async () => {
+        eliminarProducto(codProducto);
     }
 
 
@@ -26,14 +24,10 @@ export const ItemProducto = ({ productos, verProducto, productoEstado }) => {
             </div>
             <div> {/* precio contado; se divide en dos filas. */}
                 <p>Contado</p>
-                <span> $ {precioContado}</span>
-            </div>
-            <div> {/* precio Lista; se divide en dos filas. */}
-                <p>Contado</p>
-                <span> $ {precioLista}</span>
+                <span> $ {precioVenta}</span>
             </div>
             <div> {/* precio suelto; se divide en dos filas. */}
-                <p>Contado</p>
+                <p>Suelto</p>
                 <span> $ {precioSuelto} </span>
             </div>
             <div> {/* tacho basurero */}
@@ -44,7 +38,7 @@ export const ItemProducto = ({ productos, verProducto, productoEstado }) => {
                 </Link>
             </div>
             <div> {/* lapiz */}
-                <Button onClick={eliminarProducto}><DeleteForever sx={{ color: productoEstado ? 'red' : 'green' }} /> </Button>
+                <Button onClick={handleEliminarProducto}><DeleteForever sx={{ color: productoEstado ? 'red' : 'green' }} /> </Button>
             </div>
 
         </div >

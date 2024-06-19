@@ -7,7 +7,7 @@ export const productosApi = axios.create({
 });
 
 export const getProductos = async (page = 10, limite, productoEstado, busqueda = '') => {
-    console.log('campo api: ', busqueda, 'Pagina: ', page, 'Limite: ', limite, 'Estado: ', productoEstado);
+    // console.log('campo api: ', busqueda, 'Pagina: ', page, 'Limite: ', limite, 'Estado: ', productoEstado);
     try {
         const { data } = await productosApi.get(`/productos?limite=${limite}&pagina=${page}&v_estado=${productoEstado}&busqueda=${busqueda}`);
         console.log(data);
@@ -78,7 +78,7 @@ export const updateProducto = async (nuevoProducto) => {
 export const deleteProducto = async (codProducto) => {
     try {
         const responce = await productosApi.delete(`/productos/${codProducto}`)
-        return responce.data.message
+        return responce.data
     } catch (error) {
         return { message: 'Ocurrio un error al eliminar el producto', error }
     }

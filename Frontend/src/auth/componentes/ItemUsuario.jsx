@@ -2,11 +2,11 @@ import { DeleteForever, ModeEdit } from "@mui/icons-material";
 import { Button, Grid, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 
-export const ItemUsuario = ({ usuario }) => {
+export const ItemUsuario = ({ usuario, bajaUsuario }) => {
     const { codUsuario, nombreApellido, celular, estado, tipoUsuario: { tipoUsuario, codTipoUsuario } } = usuario;
 
     const eliminarUsuario = () => {
-        console.log('Eliminando usuario');
+        bajaUsuario(codUsuario);
     }
 
     return (
@@ -45,7 +45,7 @@ export const ItemUsuario = ({ usuario }) => {
                     >
                         <Button><ModeEdit color="" /></Button>
                     </Link>
-                    <Button><DeleteForever sx={{ color: estado ? 'red' : 'green' }} /></Button>
+                    <Button onClick={eliminarUsuario}><DeleteForever sx={{ color: estado ? 'red' : 'green' }} /></Button>
                 </Grid>
             </Grid>
         </Grid >

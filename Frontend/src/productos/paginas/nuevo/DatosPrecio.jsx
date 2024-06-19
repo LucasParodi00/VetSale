@@ -23,8 +23,9 @@ export const DatosPrecio = ({ nuevoProducto, setNuevoProducto, progreso, setProg
         setEstado(event.target.value)
     }
 
-    const onSubmit = async ({ stock, precioContado, precioLista, precioSuelto }) => {
-        const productoActualizado = { ...nuevoProducto, stock, precioContado, precioLista, precioSuelto, estado }
+    const onSubmit = async ({ stock, precioCompra, precioVenta, precioSuelto }) => {
+        const productoActualizado = { ...nuevoProducto, stock, precioCompra, precioVenta, precioSuelto, estado }
+
         setNuevoProducto(productoActualizado)
         let mensaje = '';
         try {
@@ -70,21 +71,21 @@ export const DatosPrecio = ({ nuevoProducto, setNuevoProducto, progreso, setProg
                     <Grid item container spacing={1}>
                         <Grid item>
                             <TextField
-                                label='precioContado'
-                                {...register('precioContado', validacion.peso)}
+                                label='Precio Compra'
+                                {...register('precioCompra', validacion.peso)}
                                 error={!!errors.peso}
                                 helperText={errors.peso?.message} />
                         </Grid>
                         <Grid item>
                             <TextField
-                                label='precioLista'
-                                {...register('precioLista', validacion.peso)}
+                                label='Precio Venta'
+                                {...register('precioVenta', validacion.peso)}
                                 error={!!errors.peso}
                                 helperText={errors.peso?.message} />
                         </Grid>
                         <Grid item>
                             <TextField
-                                label='precioSuelto'
+                                label='Precio Suelto'
                                 {...register('precioSuelto', validacion.peso)}
                                 error={!!errors.peso}
                                 helperText={errors.peso?.message} />
